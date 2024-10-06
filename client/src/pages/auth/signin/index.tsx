@@ -7,6 +7,8 @@ import {authAtom} from '@/stores/auth-store'
 import { useAtom } from 'jotai'
 import { useEffect, FormEvent } from "react";
 import { useRouter } from 'next/router'
+import { signinService } from "@/services/auth.service";
+import { toast } from "react-toastify";
 
 export default function Signin() {
 
@@ -14,14 +16,31 @@ export default function Signin() {
 
     const router = useRouter()
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
+        try {
+            e.preventDefault()
+         
         e.preventDefault()
        
         const formData = new FormData(e.target as HTMLFormElement)
-        const email = formData.get('email')
-        const password = formData.get('password')
+        const email = formData.get('email') as string
+        const password = formData.get('password') as string
 
-        console.log(email, password)
+       const response = await signinService(email, password)
+
+            
+       if (response.status === 200) {
+        toast.success('User signed in successfully')
+        setToken({ token: response.data.token })
+        router.push('/')
+       }
+
+       console.log(response);
+       
+    } catch (error) {
+          console.log(error);
+            
+    }
     }
 
     useEffect(() => {

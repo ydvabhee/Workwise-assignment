@@ -5,14 +5,17 @@ import Link from 'next/link'
 import {authAtom} from '@/stores/auth-store'
 import { useAtom } from 'jotai'
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Home() {
 
   const [{token}, setToken] = useAtom(authAtom)
 
-  useEffect(() => {
-    setToken({ token: '1234567890' })
-  }, [])
+  // useEffect(() => {
+  //   setToken({ token: '1234567890' })
+  // }, [])
+
+
 
   return (
   <div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex flex-col justify-center items-center mx-auto">

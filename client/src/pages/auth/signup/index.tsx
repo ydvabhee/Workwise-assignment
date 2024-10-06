@@ -3,49 +3,216 @@
 import Link from "next/link";
 import "@/app/globals.css";
 
-import {authAtom} from '@/stores/auth-store'
+import { Input } from "@nextui-org/input";
+import { RadioGroup, Radio, cn, Button } from "@nextui-org/react";
+
+import {z} from 'zod'
+
+
+import { authAtom } from '@/stores/auth-store'
 import { useAtom } from 'jotai'
-import { useEffect } from "react";  
+import React, { FormEvent, useEffect } from "react";
+import { toast } from "react-toastify";
+import { signupService } from "@/services/auth.service";
+import { useRouter } from "next/router";
 
 export default function Signup() {
 
-    const [{token}, setToken] = useAtom(authAtom)
+    const [{ token }, setToken] = useAtom(authAtom)
 
-    useEffect(() => {
-        setToken({ token: 'test123   ' })
-    }, [])
+    const router  = useRouter()
+
+    // local states
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+    const [confirmPassword, setConfirmPassword] = React.useState('')
+    const [type, setType] = React.useState('buyer')
+
+    const [isInvalid, setIsInvalid] = React.useState({
+        firstName: false,
+        lastName : false,
+        email: false,
+        password: false,
+        confirmPassword: false
+    })
+
+   
+
+     
+
+
+    const handleSubmit = async (e: FormEvent) => {
+        try {
+            e.preventDefault()
+
+            const response = await signupService({
+                firstName,
+                lastName,
+                email,
+                password,
+                confirmPassword,
+                type
+            })
+
+            if (response.status === 201) {
+            setToken({ token: response.data.token })
+            
+            toast.success(response.data.message) 
+            toast.success("Please login to continue") 
+
+            router.push('/auth/signin')
+            }
+            else {
+                toast.error(response.data.message)
+            }
+        }
+
+        catch (error:any) {
+
+            // if error is axios error 
+             
+            console.log(error)
+            toast.error(error?.response?.data?.error || error.message)
+            
+        }
+    }
+
+
+    const validateName = (value:string) => z.string().regex(/^[a-zA-Z]+$/).safeParse(value).success === false; 
+    const validateEmail = (value:string) => z.string().email().safeParse(value).success === false; 
+    const validatePassword = (value:string) => z.string().min(6).safeParse(value).success === false;
+
+
+ 
+
+    const handleFirstNameChange = (value:string) => {
+        setFirstName(value)
+        setIsInvalid({ ...isInvalid, firstName: validateName(value) })
+    }
+    
+    const handleLastNameChange = (value:string) => {
+        setLastName(value)
+        setIsInvalid({ ...isInvalid, lastName: validateName(value) })
+    }
+    const handleEmailChange = (value:string) => {
+        setEmail(value)
+        setIsInvalid({ ...isInvalid, email: validateEmail(value) })
+    }
+    const handlePasswordChange = (value:string) => {
+        setPassword(value)
+        setIsInvalid({ ...isInvalid, password: validatePassword(value) })
+    }
+    const handleConfirmPasswordChange = (value:string) => {
+        setConfirmPassword(value)
+        setIsInvalid({ ...isInvalid, confirmPassword: value !== password })
+    }
+
+    const isSignupDisabled = () => {
+        return isInvalid.firstName || isInvalid.lastName || isInvalid.email || isInvalid.password || isInvalid.confirmPassword
+    }
+
+
+
     return <div><div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex items-center justify-center">
-    <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-      <h1 className="text-2xl font-bold mb-6 text-center text-slate-800">Sign Up</h1>
-      {token}
-      <form>
-          <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
-              <input type="email" id="email" className="w-full p-2 border rounded" placeholder="Enter your email"/>
-          </div>
-          <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
-              <input type="password" id="password" className="w-full p-2 border rounded" placeholder="Enter your password"/>
-          </div>
-          <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700 mb-2"> Confirm Password</label>
-              <input type="password" id="password" className="w-full p-2 border rounded" placeholder="Enter your password"/>
-          </div>
-          <div className="mb-6">
-              <label className="block text-gray-700 mb-2">I am a:</label>
-              <div className="flex items-center mb-4">
-                  <input type="radio" id="buyer" name="user-type" value="buyer" className="mr-2" />
-                  <label htmlFor="buyer" className="text-gray-700">Buyer</label>
-              </div>
-              <div className="flex items-center">
-                  <input type="radio" id="seller" name="user-type" value="seller" className="mr-2" />
-                  <label htmlFor="seller" className="text-gray-700">Seller</label>
-              </div>
-          </div>
-          <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">Sign Up</button>
-      </form>
-      <p className="mt-6 text-center text-gray-700">Already have an account? <Link href="/auth/signin" className="text-blue-500 hover:underline">Sign In</Link></p>
-      
-    </div>
-  </div></div>;
-  }
+        <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
+            <h1 className="text-2xl font-bold mb-6 text-center text-slate-800">Sign Up</h1>
+
+            <form onSubmit={handleSubmit}>
+                <div className="flex flex-col lg:flex-row lg:gap-2 ">
+                    <div className="mb-4 lg:my-4 w-full">
+                        <Input
+                        required={true}
+                             
+                            value={firstName}
+                            type="text"
+                            label="First Name"
+                            variant="bordered"
+                            isInvalid={isInvalid.firstName}
+                            className="text-slate-800"
+                            errorMessage="Please enter a valid first name (letters only)"
+                            onValueChange={handleFirstNameChange}
+
+                        />
+                    </div>
+                    <div className="mb-4 lg:my-4  w-full">
+                        <Input
+                        required={true}
+
+                            value={lastName}
+                            type="text"
+                            label="Last Name"
+                            variant="bordered"
+                            isInvalid={isInvalid.lastName}
+                            onValueChange={handleLastNameChange}
+                            errorMessage="Please enter a valid last name (letters only)"
+                            className="text-slate-800"
+                        /> </div> </div>
+
+                <div className="mb-4">
+                    <Input
+                        required={true}
+
+                        value={email}
+                        type="email"
+                        label="Email"
+                        isInvalid={isInvalid.email}
+                        variant="bordered"
+                        className="text-slate-800"
+                        errorMessage="Please enter a valid email address"
+                        onValueChange={handleEmailChange}
+
+                    /> </div>
+                <div className="mb-4">
+                    <Input
+                        required={true}
+                        value={password}
+                        type="password"
+                        label="Password"
+                        variant="bordered"
+                        className="text-slate-800"
+                        isInvalid={isInvalid.password}
+                        errorMessage="Password must be at least 6 characters"
+                        onValueChange={handlePasswordChange}
+                       
+
+                    /> </div>
+                <div className="mb-4">
+                    <Input
+                        required={true}
+                        value={confirmPassword}
+                        type="password"
+                        label="Confirm Password"
+                        variant="bordered"
+                        isInvalid={isInvalid.confirmPassword}
+                        errorMessage='Passwords do not match'
+                        onValueChange={handleConfirmPasswordChange}
+                        className="text-slate-800"
+                       
+                         
+
+                    /> </div>
+
+                <div className="mb-6">
+                    <RadioGroup
+                        classNames={{ label: cn('text-slate-800') }}
+                        value={type}
+                        onValueChange={setType}
+                        color="primary"
+                        label="I'm a"
+                        orientation="horizontal"
+                    >
+                        <Radio classNames={{ label: cn('text-slate-800') }} value="buyer">Buyer</Radio>
+                        <Radio classNames={{ label: cn('text-slate-800') }} value="seller">Seller</Radio>
+
+                    </RadioGroup>
+                </div>
+                {/* <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">Sign Up</button> */}
+                <Button isDisabled={isSignupDisabled()} color="primary" className="cursor-pointer w-full p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"  type="submit" >Sign Up</Button>
+            </form>
+            <p className="mt-6 text-center text-slate-800">Already have an account? <Link href="/auth/signin" className="text-blue-500 hover:underline">Sign In</Link></p>
+
+        </div>
+    </div></div>;
+}
