@@ -2,11 +2,14 @@ const Joi = require('joi')
 
 const signinSchema = {
     body:  Joi.object({
-        email: Joi.string().email().required().messages({
+        email: Joi.string().email().required().lowercase({
+            sensitivity: 'accent',
+            force: true
+        }).messages({
             'string.email': 'Email must be a valid email ',
             'string.empty': 'Email is required in body ',
             'any.required': 'Email is required in body '
-        })  ,
+        }),
         password: Joi.string().required().min(6).max(32).messages({
             'string.empty': 'Password is required in body ',
             'any.required': 'Password is required in body ',
@@ -18,11 +21,16 @@ const signinSchema = {
 
 const signupSchema = {
     body: Joi.object({
-        name: Joi.string().max(32).alphanum().required().messages({
-            'string.empty': 'Name is required in body ',
-            'any.required': 'Name is required in body '
+        firstName: Joi.string().max(32).alphanum().required().insensitive().lowercase().messages({
+            'string.empty': 'First name is required in body ',
+            'any.required': 'First name is required in body '
         }),
-        email: Joi.string().email().required().messages({
+        lastName: Joi.string().max(32).alphanum().lowercase().messages({
+            'string.empty': 'Last name is required in body ',
+            'any.required': 'Last name is required in body '
+
+        }),
+        email: Joi.string().email().required().lowercase().messages({
             'string.email': 'Email must be a valid email ',
             'any.required': 'Email is required in body '
         }),
@@ -34,6 +42,9 @@ const signupSchema = {
         confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
             'any.required': 'Confirm password is required in body ',
             'any.only': 'Confirm password must be the same as password'
+        }),
+        type: Joi.string().valid('buyer', 'seller').required().messages({
+            'any.required': 'User type is required in body '
         })
     })
 }

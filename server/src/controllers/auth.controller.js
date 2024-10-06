@@ -1,17 +1,54 @@
+const uuid = require('uuid')
+const { v4: UUIDV4 } = uuid
+const User = require("../models/user.model")
+const bcrypt = require('bcryptjs')
+const {generateToken} = require('../utills/jwt.utill')
+
+
+const PASSWORD_SALT = 12
+
  const signin = async (req, res) => {
-   const { email, password } = req.body
+   const { email, password } = req.body 
+   const hashedPassword = await bcrypt.hash(password, PASSWORD_SALT)
 
-   console.log(email, password)
+   const user = await User.findOne({where: {email}})
 
-   res.send('Hello World')
+   if(!user){
+      return res.status(400).send('User not found')
+   }
+
+   if(!await bcrypt.compare(password, user.password)){
+      return res.status(400).send({message: 'Wrong Credentials'})
+   }
+   const token = generateToken(user)
+   res.status(200).send({
+      message: 'User signed in successfully',
+      token
+   })
 }
 
 const signup = async (req, res) => {
-   const {name, email, password, confirmPassword} = req.body
+   try{
+      const {firstName, lastName, email, password, confirmPassword, type} = req.body
 
-   console.log(name, email, password, confirmPassword)
+   const id = UUIDV4()
+  
+   if(password !== confirmPassword){
+      return res.status(400).send('password dont match')
+   }
+   const hashedPassword = await bcrypt.hash(password, PASSWORD_SALT)
+   
+   // await User.sync({force: true})
+   await User.create({id, firstName, lastName, email, password: hashedPassword, type})
 
-   res.send('Hello World')
+   res.status(201).send({message: 'User created successfully'})
+   }
+   catch(err){
+      console.log(err.message)
+      const message = err?.errors?.[0]?.validatorKey  === 'not_unique' ? 'Email already exists' : 'Something went wrong'
+      res.status(400).send({message})
+   }
+   
 }
 
  module.exports = {
