@@ -8,23 +8,24 @@ const {generateToken} = require('../utills/jwt.utill')
 const PASSWORD_SALT = 12
 
  const signin = async (req, res) => {
+   try {
    const { email, password } = req.body 
    const hashedPassword = await bcrypt.hash(password, PASSWORD_SALT)
 
    const user = await User.findOne({where: {email}})
 
-   if(!user){
-      return res.status(400).send('User not found')
-   }
-
-   if(!await bcrypt.compare(password, user.password)){
+   if( !user || !await bcrypt.compare(password, user.password)){
       return res.status(400).send({message: 'Wrong Credentials'})
    }
    const token = generateToken(user)
    res.status(200).send({
       message: 'User signed in successfully',
       token
-   })
+   }) }
+   catch(err){
+      console.log(err.message)
+      res.status(400).send({message : 'Something went wrong'})
+   }
 }
 
 const signup = async (req, res) => {
