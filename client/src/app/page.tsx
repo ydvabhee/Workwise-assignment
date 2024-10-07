@@ -4,17 +4,20 @@ import Link from 'next/link'
 
 import {authAtom} from '@/stores/auth-store'
 import { useAtom } from 'jotai'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useLogout } from "@/hooks/useLogout";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+ 
 
 export default function Home() {
 
-  const [{token}, setToken] = useAtom(authAtom)
+  const [token , setToken] = useState(localStorage.getItem('token'))
 
-  // useEffect(() => {
-  //   setToken({ token: '1234567890' })
-  // }, [])
-
+  const logout = useLogout()
+ 
+ 
 
 
   return (
@@ -23,17 +26,22 @@ export default function Home() {
     <h1 className="text-3xl font-bold mb-6 text-center text-slate-800">Welcome to Our Marketplace</h1>
     <p className="text-gray-700 mb-6 text-center">Join us as a Seller or Buyer! Our platform allows sellers to easily manage their products and buyers to find great deals.</p>
     
-    <div className="flex justify-center space-x-4 mb-6">
+   {!token ? ( <div className="flex justify-center space-x-4 mb-6">
       <Link href="/auth/signin" className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-400 transition-all duration-300 ease-in-out">Sign In</Link>
       <Link href="/auth/signup" className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-400 transition-all duration-300 ease-in-out">Sign Up</Link>
+    </div>) : ( <>
+      <div className="flex justify-center space-x-4 mb-6">
+      <Link href="/dashboard" className="bg-primary text-white px-4 py-2 rounded-lg shadow-lg hover:bg-slate-500 transition-all duration-300 ease-in-out">Dashboard</Link>
+      <span onClick={() => logout()} className=" cursor-pointer text-slate-500 px-4 py-2 ">Logout</span>
     </div>
+    </>)}
 
     <h2 className="text-xl font-semibold mb-4 text-slate-600">Features:</h2>
     <ul className="list-disc list-inside text-gray-700 mb-6">
       <li>Sign up as a Seller or Buyer</li>
       <li>Sellers can add products with details:</li>
       <ul className="list-disc list-inside ml-4">
-        <li>{token}</li>
+        
         <li>Name</li>
         <li>Category (e.g., clothes, shoes)</li>
         <li>Description</li>

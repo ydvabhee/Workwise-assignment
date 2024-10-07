@@ -2,71 +2,115 @@
 
 import Link from "next/link";
 import "@/app/globals.css";
+import { RadioGroup, Radio, cn, Button, Input } from "@nextui-org/react";
 
-import {authAtom} from '@/stores/auth-store'
+import { authAtom } from '@/stores/auth-store'
 import { useAtom } from 'jotai'
-import { useEffect, FormEvent } from "react";
+import React, { useEffect, FormEvent, useState } from "react";
 import { useRouter } from 'next/router'
 import { signinService } from "@/services/auth.service";
 import { toast } from "react-toastify";
+import { validateEmail } from "@/validations/authValidation";
+import withAuth from "@/utills/withAuth";
+import {Loading} from "@/utills/Loading";
 
-export default function Signin() {
-
-    const [{token}, setToken] = useAtom(authAtom)
+const Signin = () => {
 
     const router = useRouter()
+    const [{ token }, setToken] = useAtom(authAtom)
+
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isButtonLoading, setIsButtonLoading] = useState(false)
+    const [isInvalid, setIsInvalid] = React.useState({
+        email: false,
+    })
+
+    const handleEmailChange = (value: string) => {
+        setEmail(value)
+        setIsInvalid({ ...isInvalid, email: validateEmail(value) })
+    }
 
     const handleSubmit = async (e: FormEvent) => {
         try {
             e.preventDefault()
-         
-        e.preventDefault()
-       
-        const formData = new FormData(e.target as HTMLFormElement)
-        const email = formData.get('email') as string
-        const password = formData.get('password') as string
+            setIsButtonLoading(true)
+            const response = signinService(email, password)
 
-       const response = await signinService(email, password)
+            await toast.promise(
+                response,
+                {
+                    pending: 'Signing in...',
+                    success: {
 
-            
-       if (response.status === 200) {
-        toast.success('User signed in successfully')
-        setToken({ token: response.data.token })
-        router.push('/')
-       }
 
-       console.log(response);
-       
-    } catch (error) {
-          console.log(error);
-            
+                        render({ data: resp }) {
+                            if (resp.status === 200) {
+                                
+                                setToken({ token: resp.data.token })
+                                localStorage.setItem('token', resp.data.token)
+                                
+                            }
+                            return 'User signed in successfully'
+                        }
+                    },
+                    error: {
+                        render({ data: err }: any) {
+
+                            return err?.response?.data?.message || 'Something went wrong'
+                        },
+                    },
+                }
+            );
+            router.push('/dashboard')
+            setIsButtonLoading(false)
+        } catch (error) {
+            console.log(error);
+            setIsButtonLoading(false)
+            // toast.error('Something went wrong')
+        }
     }
-    }
 
-    useEffect(() => {
-        setToken({ token: 'test' })
-    }, [])
 
-    return <div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex items-center justify-center">
-    <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-      <h1 className="text-2xl font-bold mb-6 text-center text-slate-800">Sign In</h1>
-      <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 mb-2 text-sm">Email</label>
-              <input type="email" name="email" id="email" required className="w-full p-2 border rounded text-slate-800" placeholder="Enter your email" />
-          </div>
-          <div className="mb-6">
-              <label htmlFor="password" className="block text-gray-700 mb-2 text-sm">Password</label>
-              <input type="password" name="password" id="password" required className="w-full p-2 border rounded text-slate-800" placeholder="Enter your password" />
-          </div>
-          <div className="flex items-center justify-between mb-4">
-              
-              <a href="#" className="text-blue-500 hover:underline">Forgot password?</a>
-          </div>
-          <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">Login</button>
-      </form>
-      <p className="mt-6 text-center text-gray-700">Don't have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link></p>
-      
-    </div>
-  </div>;
+    return <Loading isLoading={false}> <div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex items-center justify-center">
+        <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+            <h1 className="text-2xl font-bold mb-6 text-center text-slate-800">Sign In</h1>
+            <form onSubmit={handleSubmit}>
+
+                <div className="mb-4">
+                    <Input
+                        required={true}
+
+                        value={email}
+                        type="email"
+                        label="Email"
+                        isInvalid={isInvalid.email}
+                        variant="bordered"
+                        className="text-slate-800"
+                        errorMessage="Please enter a valid email address"
+                        onValueChange={handleEmailChange}
+
+                    /> </div>
+                <div className="mb-4">
+                    <Input
+                        required={true}
+                        value={password}
+                        type="password"
+                        label="Password"
+                        variant="bordered"
+                        className="text-slate-800"
+                        errorMessage="Password must be at least 6 characters"
+                        onValueChange={setPassword}
+
+
+                    /> </div>
+                <Button isLoading={isButtonLoading} color="primary" className="cursor-pointer w-full p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out" type="submit" >Sign In</Button>
+            </form>
+            <p className="mt-6 text-center text-gray-700">Don't have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link></p>
+
+        </div>
+    </div> </Loading>;
 }
+
+export default Signin
