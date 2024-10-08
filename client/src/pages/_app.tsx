@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/_app.tsx
 "use client"
 import type { AppProps } from 'next/app'
@@ -9,10 +10,9 @@ import { Spinner } from '@/utills/Spinner';
 
 import "react-toastify/dist/ReactToastify.css";
 import ToastProvider from '@/providers/ToastProvider';
-import { Component, PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { User, userAtom } from '@/stores/user.store';
 import { getUser } from '@/services/user.service';
-import { AxiosError } from 'axios';
 import { Auth, authAtom } from '@/stores/auth-store';
 
  
@@ -43,9 +43,9 @@ export default function App({ Component, pageProps }: AppProps) {
 const Gateway = (props : PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(false)
   const [{token}, setToken] = useAtom<Auth>(authAtom)
-  const [user, setUser] = useAtom<User>(userAtom)
+  const [, setUser] = useAtom<User>(userAtom)
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       
       const response = await getUser()
@@ -53,7 +53,7 @@ const Gateway = (props : PropsWithChildren) => {
         setUser(response.data.user)
       }
        
-    } catch (error: AxiosError | any) {
+    } catch (error:  any) {
       
       if(error.response?.status === 401) {
         localStorage.removeItem('token')
@@ -62,14 +62,14 @@ const Gateway = (props : PropsWithChildren) => {
       console.log(" error ", error);
 
     }
-  }
+  }, [setUser])
   useEffect(() => {
     const localToken = localStorage.getItem('token') || null
     if (localToken) {
       setToken({token: localToken})
      
     }
-  }, [])
+  }, [setToken])
 
   useEffect(() => {
     if(token) {
@@ -78,7 +78,7 @@ const Gateway = (props : PropsWithChildren) => {
       setIsLoading(false)
 
     }
-  }, [token])
+  }, [token, fetchUser])
 
   if(isLoading) {
     return null

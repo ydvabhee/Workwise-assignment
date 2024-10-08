@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useRouter } from "next/navigation";
-import { Component, ComponentClass, FunctionComponent, PropsWithChildren, useEffect, useState } from "react";
+import { FunctionComponent, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
 import { useAtom } from 'jotai'
-import { authAtom } from '../stores/auth-store'
 import { userAtom } from "../stores/user.store"
 import { Spinner } from "./Spinner";
 
@@ -42,7 +42,7 @@ const withAccess = (Component: FunctionComponent, roles: string[]) => {
         return () => clearTimeout(redirect)
       }
 
-    }, [user, props.children])
+    }, [user,router, props.children])
 
     if (isLoading) {
       return <Spinner isLoading={isLoading}> </Spinner>

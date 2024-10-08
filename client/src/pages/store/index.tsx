@@ -1,6 +1,5 @@
-import { userAtom } from '@/stores/user.store'
-import { useAtom } from 'jotai'
-import React, { useEffect } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useCallback } from 'react'
 import withAccess from '../../utills/withAccess'
 import withAuth from '@/utills/withAuth'
 import Nav from '@/utills/Nav'
@@ -11,7 +10,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDisclosure
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from 'react-toastify'
 
-function index() {
+function Store() {
 
   const [products, setProducts] = React.useState<any>([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -45,17 +44,17 @@ function index() {
 
   }
 
-  const calculateTotalCartAmount = () => {
+  const calculateTotalCartAmount = useCallback(() => {
     let total = 0
     cartIteams.forEach((item: any) => {
       total += item.price * item.quantity
     })
     setTotalPrice(total)
-  }
+  }, [cartIteams]);
 
   useEffect(() => {
     calculateTotalCartAmount()
-  }, [cartIteams])
+  }, [cartIteams, calculateTotalCartAmount])
 
   useEffect(() => {
     setIsLoading(true)
@@ -130,14 +129,13 @@ function index() {
               {
                 products.length > 0 && products.map((product: any) => (
 
-                  <div className="w-full md:min-w-[300px] md:w-auto  bg-white shadow-md rounded-lg p-4">
+                  <div key={product.id} className="w-full md:min-w-[300px] md:w-auto  bg-white shadow-md rounded-lg p-4">
                     <h3 className="text-gray-700 font-semibold text-lg capitalize">{product.name}</h3>
                     <p className="text-gray-500">Category: {product.category}</p>
                     <p className="text-gray-500"> Price: {product.price}</p>
                     <p className="text-gray-500"> Discount: {product.discount}  </p>
                     <Button color="primary" onClick={() => handleAddToCart(product)} className="mt-4">Add to Cart</Button>
                   </div>
-
 
                 ))
               }
@@ -152,7 +150,7 @@ function index() {
 
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
-            {(onClose) => (
+            {() => (
               <>
                 <ModalHeader className="flex flex-col gap-1 text-slate-800">Cart</ModalHeader>
                 <ModalBody className='overflow-auto max-h-96'>
@@ -162,7 +160,7 @@ function index() {
                   {
                     cartIteams.length > 0 && cartIteams.map((product: any) => (
 
-                      <div className="p-2 m-2 flex justify-between bg-text-white shadow-md text-slate-800">
+                      <div key={product.id} className="p-2 m-2 flex justify-between bg-text-white shadow-md text-slate-800">
                         <div>
                           <p>{product.name}</p>
                           <p>${product.price}</p>
@@ -213,4 +211,4 @@ function index() {
   )
 }
 
-export default withAuth(withAccess(index, ['buyer']))
+export default withAuth(withAccess(Store, ['buyer']))

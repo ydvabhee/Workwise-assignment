@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import Link from "next/link";
@@ -15,7 +16,7 @@ import { Spinner } from "@/utills/Spinner";
 const Signin = () => {
 
     const router = useRouter()
-    const [{ token }, setToken] = useAtom(authAtom)
+    const [, setToken] = useAtom(authAtom)
 
 
     const [email, setEmail] = useState('')
@@ -105,7 +106,7 @@ const Signin = () => {
                     /> </div>
                 <Button isLoading={isButtonLoading} color="primary" className="cursor-pointer w-full p-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out" type="submit" >Sign In</Button>
             </form>
-            <p className="mt-6 text-center text-gray-700">Don't have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link></p>
+            <p className="mt-6 text-center text-gray-700"> Don&apos;t have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link></p>
 
         </div>
     </div> </Spinner>;

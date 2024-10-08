@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRouter } from "next/navigation";
-import { Component, ComponentClass, FunctionComponent, PropsWithChildren, useEffect, useState } from "react";
+import { FunctionComponent, PropsWithChildren, useEffect, useState } from "react";
 
 
 const withAuth = (Component: FunctionComponent) => {
@@ -16,7 +17,7 @@ const withAuth = (Component: FunctionComponent) => {
       }
       
       
-    }, [])
+    }, [router])
 
     if(isLoading) {
       return null

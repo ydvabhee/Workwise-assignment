@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { userAtom } from "@/stores/user.store"
 import withAuth from "@/utills/withAuth"
-import { useAtom } from "jotai"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useCallback, useEffect, useState } from "react"
 import withAccess from "../../utills/withAccess"
 import Nav from "@/utills/Nav"
 import { createProduct, CreateProductPayload, defautProductValue, deleteProduct, getSellerProducts } from "@/services/product.service"
@@ -11,6 +10,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDi
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from "react-toastify"
 import { Spinner } from "@/utills/Spinner"
+import { p } from "framer-motion/client"
 
 
 type ProductWithId = {
@@ -24,7 +24,6 @@ type ProductWithId = {
 
 
 const Dashboard = () => {
-  const [user, setUser] = useAtom(userAtom)
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false)
   const [isButtonLoading, setIsButtonLoading] = useState(false)
@@ -32,26 +31,26 @@ const Dashboard = () => {
 
   const [addProductObj, setAddProductObj] = useState<CreateProductPayload>(defautProductValue)
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () =>  {
     try {
       const response = await getSellerProducts()
       if (response.status === 200) {
         if (response?.data?.products) {
           // toast.success('Products fetched successfully')
-          setProductList([...productList, ...response.data.products as [ProductWithId]])
+          setProductList((prevProducts: ProductWithId[]) => [...prevProducts, ...response.data.products])
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error fetching products:', error);
       toast.error('Something went wrong')
     }
-  }
+  }, [])
 
   useEffect(() => {
     setIsLoading(true)
     fetchProducts()
     setIsLoading(false)
-  }, [])
+  }, [fetchProducts])
 
   const handleAddProduct = (e: FormEvent) => {
     e.preventDefault()
@@ -121,26 +120,24 @@ const Dashboard = () => {
             {
               productList?.length > 0 && productList?.map((product: ProductWithId) => {
                 return (
-                  <div className=" m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+                  <div key={product.id} className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
                     {/* Top Section: Product Info */}
                     <div className="flex justify-between items-start">
-                      {/* Checkbox */}
+                      {/* Product Name */}
                       <div className="flex items-center space-x-3">
-
                         <h2 className="text-lg font-semibold text-gray-800 capitalize">{product.name}</h2>
                       </div>
 
                       {/* Action Icons */}
                       <div className="flex space-x-4">
                         <MdDeleteForever onClick={() => handleDeleteProduct(product.id)} className="text-red-500 text-2xl cursor-pointer" />
-
                       </div>
                     </div>
 
                     {/* Price and Category */}
                     <div className="mt-4">
                       <p className="text-gray-700">
-                        <span className="font-semibold ">Price:</span> ${product.price}
+                        <span className="font-semibold">Price:</span> ${product.price}
                       </p>
                       <p className="text-gray-700">
                         <span className="font-semibold">Category:</span> {product.category}
@@ -153,9 +150,6 @@ const Dashboard = () => {
                         <span className="font-semibold text-green-600">Discount:</span> {product.discount}% Off
                       </p>
                     </div>
-
-                    {/* cards */}
-
                   </div>
                 )
               })}

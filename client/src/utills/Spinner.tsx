@@ -1,5 +1,5 @@
 
-import {CircularProgress, cn} from "@nextui-org/react";
+import {CircularProgress} from "@nextui-org/react";
 interface PropsWithChildren {
   isLoading: boolean | undefined
   children: React.ReactNode | undefined

@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import Link from "next/link";
 import "@/app/globals.css";
 import { RadioGroup, Radio, cn, Button, Input } from "@nextui-org/react";
-import { authAtom } from '@/stores/auth-store'
-import { useAtom } from 'jotai'
 import React, { FormEvent } from "react";
 import { toast } from "react-toastify";
 import { signupService } from "@/services/auth.service";
@@ -36,6 +35,7 @@ export default function Signup() {
 
     const handleSubmit = async (e: FormEvent) => {
         try {
+            setIsButtonLoading(true)
             e.preventDefault()
             const response = signupService({
                 firstName,
@@ -64,7 +64,9 @@ export default function Signup() {
             )
             toast.success('Please login to continue')
             router.push('/auth/signin')
+            setIsButtonLoading(false)
         }
+       
 
         catch (error: any) {
             console.log(error)

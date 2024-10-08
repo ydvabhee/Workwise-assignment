@@ -5,11 +5,10 @@ import Link from 'next/link'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from "react";
 import { useLogout } from "@/hooks/useLogout";
-import { useRouter } from "next/navigation";
 import { User, userAtom } from "@/stores/user.store";
 import { getUser } from "@/services/user.service";
 import { Spinner } from "@/utills/Spinner";
-
+import { useCallback } from "react";
 
 export default function Home() {
 
@@ -18,7 +17,7 @@ export default function Home() {
   const [user, setUser] = useAtom<User>(userAtom)
   const logout = useLogout()
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       setIsLoading(true)
       const response = await getUser()
@@ -31,7 +30,7 @@ export default function Home() {
       console.log(error);
 
     }
-  }
+  }, [setUser])
 
   useEffect(() => {
     const localToken = localStorage.getItem('token')
@@ -39,7 +38,7 @@ export default function Home() {
       setToken(localToken)
       fetchUser()
     }
-  }, [])
+  }, [fetchUser])
 
 
 
@@ -85,7 +84,7 @@ export default function Home() {
             </ul>
             <li>Sellers can edit or delete their products</li>
             <li>Buyers can log in and search for products by name or category</li>
-            <li>Buyers can add products to their cart with "Add to Cart" functionality</li>
+            <li>Buyers can add products to their cart with &quot;Add to Cart&quot; functionality</li>
             <li>Buyers can remove products from their cart list</li>
           </ul>
 
