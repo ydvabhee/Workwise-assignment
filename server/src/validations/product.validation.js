@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const createProductSchema = {
     body:  Joi.object({
-        name: Joi.string().max(32).alphanum().required().insensitive().lowercase().messages({
+        name: Joi.string().max(32).required().insensitive().lowercase().messages({
             'string.empty': 'Name is required in body ',
             'any.required': 'Name is required in body '
         }),
@@ -21,8 +21,18 @@ const createProductSchema = {
     }) 
 }
 
+const deleteProductSchema = {
+    params:  Joi.object({
+        id: Joi.string().required().messages({
+            'string.empty': 'Id is required in param ',
+            'any.required': 'Id is required in param '
+        }),
+    }) 
+}
+
  
 
 module.exports = {
-    createProductSchema
+    createProductSchema,
+    deleteProductSchema
 }
