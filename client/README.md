@@ -99,7 +99,7 @@ yarn start
 1. Log in as a buyer to access the product search functionality.
 2. **Search for Products**: Use the search bar to find products by name or category.
 3. **Add to Cart**: Browse and add products to your shopping cart.
-4. **Manage Cart**: View your cart, remove items and manage quantity t.
+4. **Manage Cart**: View your cart, remove items and manage quantity.
 
 ---
 
@@ -108,7 +108,7 @@ yarn start
 - **Next.js**: Framework for building the frontend.
 - **Tailwind CSS**: Styling framework for designing the user interface.
 - **React**: JavaScript library for building dynamic components.
--- **NextUI** NextUI is a UI library for React that helps you build beautiful and accessible user interfaces. Created on top of Tailwind CSS
+- **NextUI** NextUI is a UI library for React that helps you build beautiful and accessible user interfaces. Created on top of Tailwind CSS
 
 ---
 
