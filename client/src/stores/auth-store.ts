@@ -1,8 +1,14 @@
 "use client"
 import { atom } from 'jotai';
 
-export const authAtom = atom({
+export type Auth = {
+  token: string | null
+}
+
+export const defaultAuth: Auth = {
   token: '',
-});
+}
+
+export const authAtom = atom(defaultAuth);
 
 

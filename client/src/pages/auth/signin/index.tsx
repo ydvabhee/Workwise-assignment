@@ -12,8 +12,7 @@ import { signinService } from "@/services/auth.service";
 import { toast } from "react-toastify";
 import { validateEmail } from "@/validations/authValidation";
 import withAuth from "@/utills/withAuth";
-import {Loading} from "@/utills/Loading";
-
+import { Spinner} from "@/utills/Spinner";
 const Signin = () => {
 
     const router = useRouter()
@@ -73,7 +72,7 @@ const Signin = () => {
     }
 
 
-    return <Loading isLoading={false}> <div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex items-center justify-center">
+    return <Spinner isLoading={false}> <div className="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex items-center justify-center">
         <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
             <h1 className="text-2xl font-bold mb-6 text-center text-slate-800">Sign In</h1>
             <form onSubmit={handleSubmit}>
@@ -110,7 +109,7 @@ const Signin = () => {
             <p className="mt-6 text-center text-gray-700">Don't have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link></p>
 
         </div>
-    </div> </Loading>;
+    </div> </Spinner>;
 }
 
 export default Signin

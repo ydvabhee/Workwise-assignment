@@ -13,9 +13,10 @@ const jwt = require('jsonwebtoken')
  */
 const authenticate = (req, res, next) => {
   try{
-    const token = req.headers.authorization
+   
+    const token = req.headers.authorization.split('Bearer ').pop()
     if(!token){
-      return res.status(401).send({message: 'Unauthorized'})
+    throw new Error('No token provided')
     }
 
     // verify token
@@ -25,7 +26,7 @@ const authenticate = (req, res, next) => {
     next()
   } catch(err){
     console.log(err)
-    res.status(500).send({message: 'Authentication failed'})
+    res.status(401).send({message: 'Authentication failed'})
   }
 }
 
@@ -44,7 +45,7 @@ const authorize = (accessRights = []) => (req, res, next) => {
     next()
   } catch(err){
     console.log(err)
-    res.status(500).send({message: 'Authorization failed'})
+    res.status(403).send({message: 'Authorization failed'})
   }}
 
   module.exports = {

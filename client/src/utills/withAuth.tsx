@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { Component, ComponentClass, FunctionComponent, PropsWithChildren, ReactComponentElement, useEffect, useState } from "react";
+import { Component, ComponentClass, FunctionComponent, PropsWithChildren, useEffect, useState } from "react";
 
 
 const withAuth = (Component: FunctionComponent) => {

@@ -2,7 +2,7 @@
 import {CircularProgress, cn} from "@nextui-org/react";
 interface PropsWithChildren {
   isLoading: boolean | undefined
-  children: React.ReactNode
+  children: React.ReactNode | undefined
 }
 /**
  * A utility component that renders a full-screen loading
@@ -11,7 +11,8 @@ interface PropsWithChildren {
  * @param {React.ReactNode} children The content to be rendered when the loading indicator is not shown
  * @returns 
  */
-export const Loading = ({children, isLoading = true } : PropsWithChildren) => {
+
+export const Spinner = ({children, isLoading = true } : PropsWithChildren) => {
 
   return (
     <>
@@ -20,7 +21,7 @@ export const Loading = ({children, isLoading = true } : PropsWithChildren) => {
      <CircularProgress size="lg" label="Loading..." />
     </div>
   </div>}
-      {children}
+      {children && children}
     </>
   )
 }
