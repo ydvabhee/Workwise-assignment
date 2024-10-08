@@ -176,7 +176,7 @@ const Dashboard = () => {
               <form onSubmit={handleAddProduct}>
                 <ModalHeader className="flex flex-col gap-1 text-slate-800">Add New Product</ModalHeader>
                 <ModalBody>
-                  <Input isRequired label="Product Name" value={addProductObj.name} onChange={(e) => setAddProductObj({ ...addProductObj, name: e.target.value })} placeholder="Product Name" />
+                  <Input isRequired required autoFocus label="Product Name" value={addProductObj.name} onChange={(e) => setAddProductObj({ ...addProductObj, name: e.target.value })} placeholder="Product Name" />
                   <Input isRequired required  label="Category" placeholder="Category" value={addProductObj.category} onChange={(e) => setAddProductObj({ ...addProductObj, category: e.target.value })} />
                   <Input type="number" label="Price" placeholder="Price" value={String(addProductObj.price)} onChange={(e) => setAddProductObj({ ...addProductObj, price: Number(e.target.value) })} />
                   <Input type="number" label="Discount in %" max={100} maxLength={3} placeholder="Discount" value={String(addProductObj.discount)} onChange={(e) => Number(e.target.value)<= 100 && setAddProductObj({ ...addProductObj, discount: Number(e.target.value) })} />
