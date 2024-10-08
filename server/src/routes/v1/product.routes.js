@@ -8,7 +8,7 @@ const {createProduct, getProdcuts, deleteProduct} = require('../../controllers/p
 
 const router = express.Router()
 
-router.get('/', authenticate, authorize('seller', 'buyer'), getProdcuts )
+router.get('/', authenticate, authorize(['seller', 'buyer']), getProdcuts )
 router.post('/', authenticate, authorize('seller'), validate(createProductSchema), createProduct )
 router.delete('/:id', authenticate, authorize('seller'), validate(deleteProductSchema), deleteProduct )
 
