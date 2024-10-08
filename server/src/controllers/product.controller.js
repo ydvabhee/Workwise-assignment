@@ -13,6 +13,16 @@ const getProdcuts = async (req, res) => {
    }
 }
 
+const getSellerProdcuts = async (req, res) => {
+   try {
+      const user = req.user
+      const products = await Product.findAll({where: {seller_id: user.id}})
+      res.status(200).send({products})
+   } catch (error) {
+      res.status(400).send({message: 'Something went wrong'})
+   }
+}
+
 const getProductById = async (req, res) => {
    try {
       const {id} = req.params
@@ -26,11 +36,12 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
    try {
+      const user = req.user
       const {name, price, discount, category} = req.body
       const id = UUIDV4()
 
       // Product.sync({force: true})
-      const product = await Product.create({id, name, price, discount, category})
+      const product = await Product.create({id, name, price, discount, category, seller_id: user.id})
       res.status(201).send({message: 'Product created successfully', product})
    } catch (err) {
       console.log(err);
@@ -54,6 +65,7 @@ const deleteProduct = async (req, res) => {
 
  module.exports = {
    getProdcuts,
+   getSellerProdcuts,
    createProduct,
    getProductById,
    deleteProduct

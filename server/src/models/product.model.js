@@ -28,7 +28,11 @@ const Product = sequelize.define(
     discount: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    } 
+    },
+    seller_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   },
   {
     // Other model options go here

@@ -30,6 +30,15 @@ const deleteProductSchema = {
     }) 
 }
 
+const getSellerProductSchema = {
+    params:  Joi.object({
+        seller_id: Joi.string().required().messages({
+            'string.empty': 'Id is required in param ',
+            'any.required': 'Id is required in param '
+        }),
+    }) 
+}
+
  
 
 module.exports = {
