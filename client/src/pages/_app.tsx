@@ -18,16 +18,17 @@ import { Auth, authAtom } from '@/stores/auth-store';
  
 export default function App({ Component, pageProps }: AppProps) {
 
-  const getLayout = Component.getLayout ?? ((page) => page)
-  return getLayout( <Provider>
-    <NextUIProvider>
-    <ToastProvider>
-      <Gateway>
-    <Component {...pageProps} /> </Gateway>
-    </ToastProvider>
-    </NextUIProvider>
-  </Provider>);
-   
+ 
+  return (
+    <Provider>
+      <NextUIProvider>
+      <ToastProvider>
+        <Gateway>
+      <Component {...pageProps} /> </Gateway>
+      </ToastProvider>
+      </NextUIProvider>
+    </Provider>
+  )
 }
 
 

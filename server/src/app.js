@@ -5,6 +5,7 @@ const cors = require('cors')
 // routes
 const authRoutes = require('./routes/v1/auth.routes')
 const userRoutes = require('./routes/v1/user.routes')
+const productRoutes = require('./routes/v1/product.routes')
 
 const helmet = require('helmet')
 const sequelize = require('./db')
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 // routes
 app.use('/v1/auth', authRoutes)
 app.use('/v1/user', userRoutes)
+app.use('/v1/product', productRoutes)
 
 // database connection
 sequelize.authenticate()
