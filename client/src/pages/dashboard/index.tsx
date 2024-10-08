@@ -6,8 +6,7 @@ import { useAtom } from "jotai"
 import { FormEvent, useEffect, useState } from "react"
 import withAccess from "../../utills/withAccess"
 import Nav from "@/utills/Nav"
-import { createProduct, CreateProductPayload, defautProductValue, deleteProduct, getAllProducts } from "@/services/product.service"
-// import { Button } from "@nextui-org/button", useDisclosure
+import { createProduct, CreateProductPayload, defautProductValue, deleteProduct, getAllProducts, getSellerProducts } from "@/services/product.service"
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, Chip, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDisclosure, Input } from "@nextui-org/react";
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from "react-toastify"
@@ -37,7 +36,7 @@ const Dashboard = () => {
 
   const fetchProducts = async() => {
     try {
-      const response = await getAllProducts()
+      const response = await getSellerProducts()
       if(response.status === 200) {
         if(response?.data?.products ) {
           // toast.success('Products fetched successfully')

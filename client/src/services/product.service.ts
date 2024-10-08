@@ -28,6 +28,11 @@ export const getAllProducts = async () => {
   return response;
 }
 
+export const getSellerProducts = async () => {
+  const response = await api.get('/product/seller_products');
+  return response;
+}
+
 export const deleteProduct = async (id: string) => {
   const response = await api.delete(`/product/${id}`);
   return response;
