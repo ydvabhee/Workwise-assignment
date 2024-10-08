@@ -2,23 +2,16 @@
 
 import Link from "next/link";
 import "@/app/globals.css";
-
 import { RadioGroup, Radio, cn, Button, Input } from "@nextui-org/react";
-
-import { z } from 'zod'
-
-
 import { authAtom } from '@/stores/auth-store'
 import { useAtom } from 'jotai'
-import React, { FormEvent, useEffect } from "react";
+import React, { FormEvent } from "react";
 import { toast } from "react-toastify";
 import { signupService } from "@/services/auth.service";
 import { useRouter } from "next/router";
 import { validateEmail, validateName, validatePassword } from "@/validations/authValidation";
 
 export default function Signup() {
-
-    const [{ token }, setToken] = useAtom(authAtom)
 
     const router = useRouter()
 
@@ -41,13 +34,9 @@ export default function Signup() {
 
 
 
-
-
-
     const handleSubmit = async (e: FormEvent) => {
         try {
             e.preventDefault()
-
             const response = signupService({
                 firstName,
                 lastName,
@@ -60,7 +49,7 @@ export default function Signup() {
             await toast.promise(
                 response,
                 {
-                      pending: 'Signing up...',
+                    pending: 'Signing up...',
                     success: {
                         render({ data: resp }) {
                             return resp.data.message
@@ -75,17 +64,10 @@ export default function Signup() {
             )
             toast.success('Please login to continue')
             router.push('/auth/signin')
-
-            
-
         }
 
         catch (error: any) {
-
-            // if error is axios error 
             console.log(error)
-            // toast.error(error.message || 'Something went wrong')
-
         }
     }
 

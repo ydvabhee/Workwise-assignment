@@ -13,7 +13,6 @@ import { Spinner } from "@/utills/Spinner";
 
 export default function Home() {
 
-  const router = useRouter()
   const [token, setToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useAtom<User>(userAtom)

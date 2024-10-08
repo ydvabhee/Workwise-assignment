@@ -4,26 +4,21 @@ import React, { useEffect } from 'react'
 import withAccess from '../../utills/withAccess'
 import withAuth from '@/utills/withAuth'
 import Nav from '@/utills/Nav'
-import { useLogout } from '@/hooks/useLogout'
 import { getAllProducts } from '@/services/product.service'
 import { Spinner } from '@/utills/Spinner'
 import { IoMdCart } from "react-icons/io";
-import { Card, CardHeader, CardBody, CardFooter, Avatar, Chip, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDisclosure, Input, Button } from "@nextui-org/react";
+import { Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDisclosure, Button } from "@nextui-org/react";
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from 'react-toastify'
 
 function index() {
 
-  const [user, setUser] = useAtom(userAtom)
-  
-
   const [products, setProducts] = React.useState<any>([])
   const [isLoading, setIsLoading] = React.useState(false)
   const [originalProducts, setOriginalProducts] = React.useState<any>([])
   const [cartIteams, setCartIteams] = React.useState<any>([])
-
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [totalPrice, setTotalPrice] = React.useState(0)
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [totalPrice, setTotalPrice] = React.useState(0)
 
 
   const fetchProducts = async () => {
@@ -76,7 +71,7 @@ function index() {
 
     // find the product in the cart
     const productIndex = cartIteams.findIndex((item: any) => item.id === product.id)
-    
+
     if (productIndex !== -1) {
       // update the quantity
       const newCart = [...cartIteams]
@@ -89,7 +84,7 @@ function index() {
     // add the product to the cart
     setCartIteams([...cartIteams, cartObj])
     toast.success('Product added to cart')
-    
+
   }
 
   const handleRemoveProduct = (product: any) => {
@@ -162,31 +157,30 @@ function index() {
                 <ModalHeader className="flex flex-col gap-1 text-slate-800">Cart</ModalHeader>
                 <ModalBody className='overflow-auto max-h-96'>
                   {
-                    cartIteams.length === 0 && (<div> No items in the cart</div>) 
+                    cartIteams.length === 0 && (<div> No items in the cart</div>)
                   }
-
                   {
                     cartIteams.length > 0 && cartIteams.map((product: any) => (
 
                       <div className="p-2 m-2 flex justify-between bg-text-white shadow-md text-slate-800">
                         <div>
-                         <p>{product.name}</p>
-                         <p>${product.price}</p>
+                          <p>{product.name}</p>
+                          <p>${product.price}</p>
                         </div>
                         <div className='flex flex-col justify-center items-end gap-2'>
-                        <MdDeleteForever onClick={() => handleRemoveProduct(product)} className='size-6 cursor-pointer text-red-600'/>
-                        
-<form className="max-w-xs mx-auto">
-  <div className="relative flex items-center max-w-[8rem]">
-    <button onClick={() => handleQuantityChange(product, product.quantity - 1)} type="button" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 py-1  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-     -
-    </button>
-    <input type="text" readOnly className=" border-gray-300 text-center w-12 outline-none" placeholder={product.quantity} required />
-    <button onClick={() => handleQuantityChange(product, product.quantity + 1)} type="button" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 py-1  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-      +
-    </button>
-  </div>
-</form>
+                          <MdDeleteForever onClick={() => handleRemoveProduct(product)} className='size-6 cursor-pointer text-red-600' />
+
+                          <form className="max-w-xs mx-auto">
+                            <div className="relative flex items-center max-w-[8rem]">
+                              <button onClick={() => handleQuantityChange(product, product.quantity - 1)} type="button" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 py-1  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                -
+                              </button>
+                              <input type="text" readOnly className=" border-gray-300 text-center w-12 outline-none" placeholder={product.quantity} required />
+                              <button onClick={() => handleQuantityChange(product, product.quantity + 1)} type="button" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 py-1  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                +
+                              </button>
+                            </div>
+                          </form>
 
 
                         </div>
@@ -196,17 +190,17 @@ function index() {
                   }
                 </ModalBody>
                 <ModalFooter>
-                  
-                 {cartIteams.length> 0 && (
-                  <>
-                  <Button isDisabled ={true} disableRipple={true} variant='light'>
-                    Total : ${totalPrice}
-                  </Button>
-                  <Button color="success" >
-                    Checkout
-                  </Button>
-                  </>
-                 )
+
+                  {cartIteams.length > 0 && (
+                    <>
+                      <Button isDisabled={true} disableRipple={true} variant='light'>
+                        Total : ${totalPrice}
+                      </Button>
+                      <Button color="success" >
+                        Checkout
+                      </Button>
+                    </>
+                  )
                   }
                 </ModalFooter>
               </>

@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import "@/app/globals.css";
-import { RadioGroup, Radio, cn, Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 
 import { authAtom } from '@/stores/auth-store'
 import { useAtom } from 'jotai'
-import React, { useEffect, FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useRouter } from 'next/router'
 import { signinService } from "@/services/auth.service";
 import { toast } from "react-toastify";
 import { validateEmail } from "@/validations/authValidation";
-import withAuth from "@/utills/withAuth";
-import { Spinner} from "@/utills/Spinner";
+import { Spinner } from "@/utills/Spinner";
 const Signin = () => {
 
     const router = useRouter()
@@ -46,10 +45,10 @@ const Signin = () => {
 
                         render({ data: resp }) {
                             if (resp.status === 200) {
-                                
+
                                 setToken({ token: resp.data.token })
                                 localStorage.setItem('token', resp.data.token)
-                                
+
                             }
                             return 'User signed in successfully'
                         }
