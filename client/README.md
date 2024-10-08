@@ -91,12 +91,12 @@ yarn start
 - Once registered, log in with your credentials.
 
 ### **Seller Workflow**
-1. After logging in as a seller, navigate to the **Product Dashboard**.
+1. After logging in as a seller, it will navigate to the **Product Dashboard**.
 2. **Add a Product**: Fill in the product name, category, price, and discount.
 3. **View Listings**: Sellers can view their added products from the dashboard.
 
 ### **Buyer Workflow**
-1. Log in as a buyer to access the product search functionality.
+1. After logging in as a buyer, it will navigate to the **Store** page.
 2. **Search for Products**: Use the search bar to find products by name or category.
 3. **Add to Cart**: Browse and add products to your shopping cart.
 4. **Manage Cart**: View your cart, remove items and manage quantity.
