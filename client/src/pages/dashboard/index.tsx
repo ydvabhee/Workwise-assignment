@@ -40,7 +40,7 @@ const Dashboard = () => {
       const response = await getAllProducts()
       if(response.status === 200) {
         if(response?.data?.products ) {
-          toast.success('Products fetched successfully')
+          // toast.success('Products fetched successfully')
           setProductList([...productList, ...response.data.products as [ProductWithId]] ) 
         }
       }
@@ -109,7 +109,17 @@ const Dashboard = () => {
           <Button color="primary" onPress={onOpen}>Add Product</Button>
         </div>
 
+        { productList?.length === 0 && 
+        (
+          <div className="flex justify-center items-center h-96">
+            <p className="text-gray-500 text-lg">No products found</p>
+          </div>
+        )
+        }
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
         {
           productList?.length > 0 && productList?.map((product: ProductWithId) => {
             return (
