@@ -16,11 +16,12 @@ export const useLogout = () => {
   const router = useRouter()
 
   const logout = () => {
+    router.push('/auth/signin')
     toast.success('Logged out successfully')
     setToken({token: ''})
     localStorage.removeItem('token')
     setUser(defaultUser)
-    router.push('/auth/signin')
+    
   }
   return logout
 }
