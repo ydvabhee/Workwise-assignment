@@ -10,7 +10,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, useDi
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from "react-toastify"
 import { Spinner } from "@/utills/Spinner"
-import { p } from "framer-motion/client"
 
 
 type ProductWithId = {
