@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project is a Next.js-based e-commerce platform that supports two types of users: **Buyers** and **Sellers**. The application includes user authentication, product management, and a shopping cart feature. Sellers can add, edit, and delete products, while buyers can search, browse, and add products to their cart.
+
+## Features
+
+### 1. **User Authentication**
+   - Users can sign up and log in.
+   - During sign-up, users can choose between two roles: **Buyer** or **Seller**.
+   - Role-based access control to ensure users have access to the correct functionalities.
+
+### 2. **Seller Functionality**
+   - **Product Management**: Sellers can add, edit, and delete their products.
+   - Product details include:
+     - Name
+     - Category (e.g., clothes, shoes)
+     - Description
+     - Price
+     - Discount
+   - Sellers have access to a product management dashboard to modify their listings.
+
+### 3. **Buyer Functionality**
+   - **Product Search**: Buyers can search for products by name or filter by category.
+   - **Shopping Cart**: Buyers can add products to their shopping cart and remove them as needed.
+   - **Cart Management**: Buyers can view and manage the items in their cart.
+
+---
+
+## Prerequisites
+
+Before running the application, ensure you have the following installed:
+
+- **Node.js** (>= v14)
+- **npm** or **yarn** package manager
+
+---
+
+## Installation and Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/ydvabhee/Workwise-assignment.git
+cd Workwise-assignment/client
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Running the Application
+
+To run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To build the app for production:
 
-## Learn More
+```bash
+npm run build
+# or
+yarn build
+```
 
-To learn more about Next.js, take a look at the following resources:
+To start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm start
+# or
+yarn start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Application Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### **User Authentication**
+- Navigate to the **Sign-Up** page to create an account.
+- Choose your role as either a **Buyer** or **Seller**.
+- Once registered, log in with your credentials.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### **Seller Workflow**
+1. After logging in as a seller, navigate to the **Product Dashboard**.
+2. **Add a Product**: Fill in the product name, category, price, and discount.
+3. **View Listings**: Sellers can view their added products from the dashboard.
+
+### **Buyer Workflow**
+1. Log in as a buyer to access the product search functionality.
+2. **Search for Products**: Use the search bar to find products by name or category.
+3. **Add to Cart**: Browse and add products to your shopping cart.
+4. **Manage Cart**: View your cart, remove items and manage quantity t.
+
+---
+
+## Technologies Used
+
+- **Next.js**: Framework for building the frontend.
+- **Tailwind CSS**: Styling framework for designing the user interface.
+- **React**: JavaScript library for building dynamic components.
+-- **NextUI** NextUI is a UI library for React that helps you build beautiful and accessible user interfaces. Created on top of Tailwind CSS
+
+---
+
+## Contributing
+
+Feel free to fork the project and make your contributions. You can submit a pull request with your changes, and we'll review them as soon as possible.
+
+ 
+
+Happy coding!
