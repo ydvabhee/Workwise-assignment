@@ -69,6 +69,7 @@ export default function Signup() {
        
 
         catch (error: any) {
+            setIsButtonLoading(false)
             console.log(error)
         }
     }
