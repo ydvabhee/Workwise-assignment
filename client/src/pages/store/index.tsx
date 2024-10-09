@@ -117,7 +117,7 @@ function Store() {
                 <div className='flex justify-between gap-2 items-center'>
 
                   <input onChange={(e) => handleSearch(e.target.value)} id="search" type="text" placeholder="Example: Books" className="block w-full border text-slate-700 border-gray-300 rounded-md p-2" />
-                  <Button color="primary" onClick={() => { setProducts(originalProducts) }} className="">Clear</Button>
+                  <Button color="primary" onClick={() => { setProducts(originalProducts) }} className="">Refresh</Button>
                   <Button onPress={onOpen} color="success" startContent={<IoMdCart />} onClick={() => { setProducts(originalProducts) }}>{cartIteams.length}</Button>
                 </div>
               </div>
